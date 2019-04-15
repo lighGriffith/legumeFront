@@ -1,50 +1,31 @@
-import React, { Component } from "react";
-import L from "leaflet";
-//import * as ELG from "esri-leaflet-geocoder";
-import { Map, TileLayer } from "react-leaflet";
+import * as React from "react";
+import { Map, TileLayer, Marker, Popup } from "react-leaflet";
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
 
-// import marker icons
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
-  iconRetinaUrl:
-    "https://unpkg.com/leaflet@1.4.0/dist/images/marker-icon-2x.png",
-  iconUrl: "https://unpkg.com/leaflet@1.4.0/dist/images/marker-icon.png",
-  shadowUrl: "https://unpkg.com/leaflet@1.4.0/dist/images/marker-shadow.png"
+    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+    iconUrl: require('leaflet/dist/images/marker-icon.png'),
+    shadowUrl: require('leaflet/dist/images/marker-shadow.png')
 });
-
-class MapComp extends Component {
-  componentDidMount() {
-    const map = this.leafletMap.leafletElement;
-    //const searchControl = new ELG.Geosearch().addTo(map);
-    const results = new L.LayerGroup().addTo(map);
-
-    /*searchControl.on("results", function(data) {
-      results.clearLayers();
-      for (let i = data.results.length - 1; i >= 0; i--) {
-        results.addLayer(L.marker(data.results[i].latlng));
-      }
-    });*/
-  }
-
-  render() {
+const myProp= {
+      zoom: 19,
+      center:[51.505,-0.09]
+    };
+export const DeviceMap = (props) => {
     return (
-      <Map
-        style={{ height: "100vh" }}
-        center={[37.7833, -122.4167]}
-        zoom="10"
-        ref={m => {
-          this.leafletMap = m;
-        }}
-      >
-        <TileLayer
-          attribution="&copy; <a href='https://osm.org/copyright'>OpenStreetMap</a> contributors"
-          url={"http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"}
-        />
-        <div className="pointer" />
-      </Map>
-    );
-  }
+        <Map center={myProp.center} zoom={myProp.zoom} style={{flex: '1 1 auto'}}>
+          <TileLayer
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+          />
+          <Marker position={myProp.center}>
+            <Popup>
+              A pretty CSS3 popup. <br /> Easily customizable.
+            </Popup>
+          </Marker>
+        </Map>
+    )
 }
-
-export default MapComp;
