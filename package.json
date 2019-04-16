@@ -36,7 +36,6 @@
     "firebase": "^5.9.2",
     "leaflet": "^1.4.0",
     "native-base": "^2.12.1",
-    "pigeon-maps": "^0.12.1",
     "prop-types": "^15.7.2",
     "react": "16.5.0",
     "react-dom": "^16.8.6",

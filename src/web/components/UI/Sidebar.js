@@ -26,6 +26,13 @@ const SidebarNavItems = () => (
         <span>Produits</span>
       </Link>
     </NavItem>
+    <NavItem>
+      <Link className={`nav-link ${window.location.pathname.startsWith('/map') && 'active'}`} to="/map">
+        <i className="icon-notebook" />
+        {' '}
+        <span>Map</span>
+      </Link>
+    </NavItem>
   </div>
 );
 

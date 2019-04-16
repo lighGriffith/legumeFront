@@ -27,6 +27,9 @@ import UpdateProfileComponent from '../components/User/UpdateProfile';
 import ProduitsContainer from '../../containers/Produits';
 import ProduitsComponent from '../components/Produit/Produits';
 
+import MapContainer from '../../containers/Map';
+import MapComponent from '../components/Map/Map';
+
 import Error from '../components/UI/Error';
 
 const Index = () => (
@@ -85,6 +88,14 @@ const Index = () => (
       render={props => (
         <TemplateSidebar pageTitle="Produits">
           <ProduitsContainer {...props} Layout={ProduitsComponent} />
+        </TemplateSidebar>
+      )}
+    />
+    <Route
+      path="/map"
+      render={props => (
+        <TemplateSidebar pageTitle="Map">
+          <MapContainer {...props} Layout={MapComponent} />
         </TemplateSidebar>
       )}
     />
