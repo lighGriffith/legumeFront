@@ -53,7 +53,7 @@ class Login extends React.Component {
     const { onFormSubmit, history } = this.props;
 
     return onFormSubmit(this.state)
-      .then(() => setTimeout(() => history.push('/'), 1000))
+      .then(() => setTimeout(() => history.push('/map'), 1000))
       .catch(() => {});
   }
 

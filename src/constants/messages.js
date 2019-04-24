@@ -22,4 +22,8 @@ export const errorMessages = {
   // Recipes
   recipe404: 'Recipe not found',
   missingMealId: 'Missing meal definition',
+  //Géolocalisation
+  notFound:"Nous n'avons pas pu trouver votre adresse.",
+  manqueRenseignement:"Veuillez renseigner l'adresse et la ville.",
+  problemeAppel:"Un problème inconnu est survenu lors de la localisation. Veuillez-réesayer plus tard."
 };

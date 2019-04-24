@@ -21,6 +21,7 @@ class SignUp extends React.Component {
     success: PropTypes.string,
     loading: PropTypes.bool.isRequired,
     onFormSubmit: PropTypes.func.isRequired,
+    onLatLngSubmit: PropTypes.func.isRequired,
     history: PropTypes.shape({
       push: PropTypes.func.isRequired,
     }).isRequired,
@@ -32,22 +33,33 @@ class SignUp extends React.Component {
   }
 
   state = {
-    firstName: '',
-    lastName: '',
+    username: '',
     email: '',
     password: '',
     password2: '',
+    telephone: '',
+    isFermier: false,
+    adresse:'',
+    ville:''
   }
 
   constructor(props) {
     super(props);
-
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChangeLocation = this.handleChangeLocation.bind(this);
   }
 
   handleChange = e => this.setState({ [e.target.name]: e.target.value });
+  handleChangerIsFermier= e => this.setState({ [e.target.name]: e.target.checked });
 
+  handleChangeLocation = e => {
+    //attention prop est immutable il faut donc forcément remonter pour mettre à jour.
+    const { onLatLngSubmit } = this.props;
+    onLatLngSubmit(this.state)
+    .then(() => {})
+    .catch(() => {});
+  }
   handleSubmit = (event) => {
     event.preventDefault();
     const { onFormSubmit, history } = this.props;
@@ -60,7 +72,7 @@ class SignUp extends React.Component {
   render() {
     const { loading, error, success } = this.props;
     const {
-      firstName, lastName, email, password, password2,
+      username, email, password, password2,telephone,isFermier,adresse,ville
     } = this.state;
 
     return (
@@ -75,31 +87,19 @@ class SignUp extends React.Component {
 
                 <Form onSubmit={this.handleSubmit}>
                   <FormGroup>
-                    <Label for="firstName">First Name</Label>
+                    <Label for="username">First Name</Label>
                     <Input
                       type="text"
-                      name="firstName"
-                      id="firstName"
+                      name="username"
+                      id="username"
                       placeholder="John"
                       disabled={loading}
-                      value={firstName}
-                      onChange={this.handleChange}
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <Label for="lastName">Last Name</Label>
-                    <Input
-                      type="text"
-                      name="lastName"
-                      id="lastName"
-                      placeholder="Doe"
-                      disabled={loading}
-                      value={lastName}
+                      value={username}
                       onChange={this.handleChange}
                     />
                   </FormGroup>
 
-                  <FormGroup style={{ marginTop: 40 }}>
+                  <FormGroup >
                     <Label for="email">Email</Label>
                     <Input
                       type="email"
@@ -134,6 +134,57 @@ class SignUp extends React.Component {
                       value={password2}
                       onChange={this.handleChange}
                     />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="adresse">Adresse</Label>
+                    <Input
+                      type="adresse"
+                      name="adresse"
+                      id="adresse"
+                      placeholder="boulevard carnot"
+                      disabled={loading}
+                      value={adresse}
+                      onBlur={this.handleChangeLocation}
+                      onChange={this.handleChange}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="ville">Ville</Label>
+                    <Input
+                      type="ville"
+                      name="ville"
+                      id="ville"
+                      placeholder="Paris"
+                      disabled={loading}
+                      value={ville}
+                      onBlur={this.handleChangeLocation}
+                      onChange={this.handleChange}
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <Label for="telephone">Téléphone</Label>
+                    <Input
+                      type="telephone"
+                      name="telephone"
+                      id="telephone"
+                      placeholder="0789098765"
+                      disabled={loading}
+                      value={telephone}
+                      onChange={this.handleChange}
+                    />
+                  </FormGroup>
+                  <FormGroup >
+                    <Label for="isFermier">
+                     Fermier/Producteur :
+                      <Input type="checkbox"
+                      name="isFermier"
+                      id="isFermier"
+                      disabled={loading}
+                      value={isFermier}
+                      onChange={this.handleChangerIsFermier}
+                      style={{ marginLeft: 20 }}
+                      />
+                      </Label>
                   </FormGroup>
                   <Button color="primary" disabled={loading}>
                     {loading ? 'Loading' : 'Sign Up'}
