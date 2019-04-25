@@ -11,8 +11,8 @@ import jsonValidator from '../util/validator/validator';
       return new Promise((resolve, reject) => {
         axios.post("http://localhost:3001/api/signin",auth).then( retour => {
           if(retour.data.success){
-            dispatch({type: 'UPDATE_USER',data:retour.data});
-            console.log("after Reducer");
+            console.log(retour.data);
+            sessionStorage.setItem('jwt',retour.data.token);
             resolve();
           }else{
             reject(retour.data.error);
@@ -23,44 +23,17 @@ import jsonValidator from '../util/validator/validator';
   }
 
 export function getUsers() {
-  const data = [{
-        "_id":"1",
-        "username": "quentin",
-        "password": "quentin",
-        "email":"quentin@gmail.com",
-        "position":[51.505,-0.09],
-        "telephone"    : "0990298378",
-        "isFermier" :true
-      },{
-            "_id":"2",
-            "username": "quentin",
-            "password": "quentin",
-            "email":"quentin@gmail.com",
-            "position":[51.502,-0.09],
-            "telephone"    : "0990298378",
-            "isFermier" :true
-          },{
-                "_id":"3",
-                "username": "quentin",
-                "password": "quentin",
-                "email":"quentin@gmail.com",
-                "position":[51.505,-0.08],
-                "telephone"    : "0990298378",
-                "isFermier" :false
-              },{
-                    "_id":"4",
-                    "username": "quentin",
-                    "password": "quentin",
-                    "email":"quentin@gmail.com",
-                    "position":[51.504,-0.07],
-                    "telephone"    : "0990298378",
-                    "isFermier" :false
-                  }];
-                  return (dispatch) => {
-                    return new Promise((resolve, reject) => {
-                          resolve(data);
-                    }).catch((err) => {console.log(err);throw err.message});
-                  }
+  const jwt = sessionStorage.getItem('jwt');
+  return dispatch => new Promise( (resolve, reject) => {
+    // Validation rules
+      return axios.get("http://localhost:3001/api/users",{headers:{
+        'authorization':jwt
+      }})
+        .then((users) => {
+          users.data.forEach(function(element) { element.position = [element.lat,element.lng]; });
+          return resolve(dispatch({ type: 'SHOW_MAP_USER', data:users.data }));
+        }).catch(reject);
+  }).catch((err) => { console.log(err);throw err; });
 
 }
 
@@ -73,16 +46,14 @@ export function addUser(formData){
   return dispatch => new Promise( (resolve, reject) => {
     // Validation rules
     var validMessage=jsonValidator.validate(formData,"user");
-    console.log(validMessage);
-    if (!username) return reject({ message: errorMessages.missingFirstName });
-    if (!email) return reject({ message: errorMessages.missingEmail });
-    if (!password) return reject({ message: errorMessages.missingPassword });
-    if (!password2) return reject({ message: errorMessages.missingPassword });
-    if (password !== password2) return reject({ message: errorMessages.passwordsDontMatch });
-
-    return axios.post("http://localhost:3001/api/signup",formData)
-      .then(() => {
-        resolve()
-      }).catch(reject);
-  }).catch((err) => { throw err.message; });
+    if(password!=password2)validMessage.push({field:"password",message:"Votre password doit être identique dans les deux champs."})
+    if(validMessage && validMessage.length>1){
+      return reject(validMessage);
+    } else{
+      return axios.post("http://localhost:3001/api/signup",formData)
+        .then(() => {
+          resolve()
+        }).catch(reject);
+    }
+  }).catch((err) => { throw err; });
 }

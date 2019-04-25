@@ -10,13 +10,6 @@ export default function usersReducer(state = initialState, action) {
         users: action.data,
       };
     }
-    case 'UPDATE_USER':{
-      console.log(action);
-      return {
-        ...state,
-        user: action.data,
-      };
-    }
     default:
       return state;
   }

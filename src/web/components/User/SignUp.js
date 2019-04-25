@@ -17,7 +17,7 @@ import { Link, withRouter } from 'react-router-dom';
 
 class SignUp extends React.Component {
   static propTypes = {
-    error: PropTypes.string,
+    error: PropTypes.array,
     success: PropTypes.string,
     loading: PropTypes.bool.isRequired,
     onFormSubmit: PropTypes.func.isRequired,
@@ -57,16 +57,16 @@ class SignUp extends React.Component {
     //attention prop est immutable il faut donc forcément remonter pour mettre à jour.
     const { onLatLngSubmit } = this.props;
     onLatLngSubmit(this.state)
-    .then(() => {})
-    .catch(() => {});
+    .then(() => {window.scrollTo(0, 0)})
+    .catch(() => {window.scrollTo(0, 0)});
   }
   handleSubmit = (event) => {
     event.preventDefault();
     const { onFormSubmit, history } = this.props;
 
     onFormSubmit(this.state)
-      .then(() => setTimeout(() => history.push('/login'), 1000))
-      .catch(() => {});
+      .then(() => setTimeout(() => {window.scrollTo(0, 0);history.push('/login');}, 1000))
+      .catch(() => {window.scrollTo(0, 0)});
   }
 
   render() {
@@ -82,7 +82,11 @@ class SignUp extends React.Component {
             <Card>
               <CardHeader>Sign Up</CardHeader>
               <CardBody>
-                {!!error && <Alert color="danger">{error}</Alert>}
+                {!!error && <Alert color="danger">
+                  {error.map((item, idx) =>
+                    <Row  key={item.field+idx.toString()} >{item.message}</Row>
+                )}
+                </Alert>}
                 {!!success && <Alert color="success">{success}</Alert>}
 
                 <Form onSubmit={this.handleSubmit}>

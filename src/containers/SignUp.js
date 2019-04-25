@@ -51,8 +51,8 @@ class SignUp extends Component {
 
     this.setState({ loading: true });
     console.log(this.state);
-    data.lat=this.state.lat;
-    data.lng=this.state.lng;
+    data.lat=parseFloat(this.state.lat);
+    data.lng=parseFloat(this.state.lng);
     console.log(data);
     return onFormSubmit(data)
       .then(() => this.setState({
@@ -60,7 +60,7 @@ class SignUp extends Component {
         success: 'Success - You are now a user',
         error: null,
       })).catch((err) => {
-        console.log(err)
+        console.log(err);
         this.setState({
           loading: false,
           success: null,

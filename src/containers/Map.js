@@ -19,6 +19,7 @@ class MapContainer extends Component {
   state = {
     error: null,
     loading: false,
+    user:{}
   }
 
   componentDidMount = () => this.fetchData();
@@ -29,18 +30,24 @@ class MapContainer extends Component {
     this.setState({ loading: true });
 
     return fetchUsers(data)
-      .then(() => this.setState({
-        loading: false,
-        error: null,
-      })).catch(err => this.setState({
+      .then((users) => {
+        this.setState({
+          loading: false,
+          error: null,
+          users:users.users,
+          user:users.user
+        })
+      }
+
+      ).catch(err => this.setState({
         loading: false,
         error: err,
       }));
   }
 
   render = () => {
-    const { Layout, users, match } = this.props;
-    const { loading, error } = this.state;
+    const { Layout, users ,match } = this.props;
+    const { loading, error,user } = this.state;
     const id = (match && match.params && match.params.id) ? match.params.id : null;
 
     return (

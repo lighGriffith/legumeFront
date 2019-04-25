@@ -23,12 +23,12 @@ const MapComponent = ({ error, loading, users }) => {
 
     return (
       <div style={divStyle}>
-        <Map center={myProp.center} zoom={myProp.zoom} style={{flex: '1 1 auto'}}>
+        <Map center={users[0].position} zoom={myProp.zoom} style={{flex: '1 1 auto'}}>
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
           />
-          {users.map((item, idx) =>
+          {!!users && users.map((item, idx) =>
             <Marker  key={item._id} position={item.position}  >
             <Popup>
               <span>{item.username} <br/>

@@ -6,23 +6,26 @@ const schema = {
       password:{
          type:"string",
          min:8,
-         max:255
+         max:255,
       },
       username:{
          type:"string",
          min:3,
-         max:255
+         max:255,
+
       },
       email:{
          type:"email"
       },
       lat:{
-         type:"string",
-         min:1,
+         type:"number",
+         min:-90,
+         max:90
       },
       lng:{
-         type:"string",
-         min:1,
+         type:"number",
+         min:-180,
+         max:180
       },
       telephone:{
          type:"string",
@@ -86,7 +89,13 @@ const schema = {
 
 
 jsonValidator.validate=function(userJson,typeShema){
-  let validator = new Validator();
+  let validator = new Validator({
+    messages: {
+       string: "Votre '{field}' n'est pas valide.",
+       stringMin: "Votre '{field}' doit comporter au moins {expected} caractères.",
+       email:"Votre '{field}' n'est pas valide.",
+   }
+ });
   var a=validator.validate(userJson, schema[typeShema]);
   return a;
 }
