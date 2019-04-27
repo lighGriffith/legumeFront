@@ -34,7 +34,6 @@ export function getUsers() {
           return resolve(dispatch({ type: 'SHOW_MAP_USER', data:users.data }));
         }).catch(reject);
   }).catch((err) => { console.log(err);throw err; });
-
 }
 
 

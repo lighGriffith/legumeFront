@@ -28,7 +28,6 @@ class MapContainer extends Component {
     const { fetchUsers } = this.props;
 
     this.setState({ loading: true });
-
     return fetchUsers(data)
       .then((users) => {
         this.setState({

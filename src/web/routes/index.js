@@ -7,6 +7,7 @@ import TemplateSidebar from '../components/Templates/Sidebar';
 
 // Routes
 import Home from '../components/Home';
+import PrivateRoute from '../components/Router/PrivateRoute';
 
 import RecipesContainer from '../../containers/Recipes';
 import RecipeListingComponent from '../components/Recipe/Listing';
@@ -84,20 +85,18 @@ const Index = () => (
       )}
     />
     <Route
-      path="/produits"
+      name="produits"
+      path="/produits/:id_user"
       render={props => (
         <TemplateSidebar pageTitle="Produits">
           <ProduitsContainer {...props} Layout={ProduitsComponent} />
         </TemplateSidebar>
       )}
     />
-    <Route
+    <PrivateRoute
       path="/map"
-      render={props => (
-        <TemplateSidebar pageTitle="Map">
-          <MapContainer {...props} Layout={MapComponent} />
-        </TemplateSidebar>
-      )}
+      pageTitle="Map"
+      component={props => (<MapContainer {...props} Layout={MapComponent} />)}
     />
     <Route
       path="/recipe/:id"

@@ -12,13 +12,12 @@ L.Icon.Default.mergeOptions({
 });
 const myProp= {
       zoom: 15,
-      center:[51.505,-0.09]
     };
-    const divStyle = {
-      display: 'flex',
-      height: '100%',
-      minHeight:'400px'
-    };
+const divStyle = {
+  display: 'flex',
+  height: '100%',
+  minHeight:'400px'
+};
 const MapComponent = ({ error, loading, users }) => {
 
     return (
@@ -32,7 +31,7 @@ const MapComponent = ({ error, loading, users }) => {
             <Marker  key={item._id} position={item.position}  >
             <Popup>
               <span>{item.username} <br/>
-                <Link to="/produits" >Voir les produits</Link>
+                <Link to={{pathname: `/produits/${item._id}`}} >Voir les produits</Link>
               </span>
 
             </Popup>
