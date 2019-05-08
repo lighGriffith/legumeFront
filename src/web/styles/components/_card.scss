@@ -1,0 +1,26 @@
+@import "../variable";
+.card {
+  background-color: $card-bg;
+  &:hover {
+    color: white;
+    background-color: #141519;
+    .card-body {
+      .card-title{
+        color:$body-color;
+      }
+    }
+  }
+  .card-header {
+    text-align:center;
+    font-size: 1.5rem;
+    color: white;
+  }
+  .card-body {
+    .card-title{
+      color:white;
+    }
+  }
+  .card-footer {
+    text-align:center;
+  }
+}

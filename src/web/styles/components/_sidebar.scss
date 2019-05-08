@@ -1,6 +1,7 @@
 /**
  * Styles for the Sidebar.js component
  */
+@import "../variable";
 
 .sidebar {
   position: fixed;
@@ -11,7 +12,7 @@
   padding: 0;
   overflow-x: hidden;
   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-  background-color: #22262E;
+  background-color: $nav-bg;
   border-right: 1px solid #252931;
 
   .nav {

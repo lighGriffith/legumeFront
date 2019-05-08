@@ -6,13 +6,12 @@ import jsonValidator from '../util/validator/validator';
   */
 
   export function authentification(auth) {
-    console.log(auth);
     return (dispatch) => {
       return new Promise((resolve, reject) => {
         axios.post("http://localhost:3001/api/signin",auth).then( retour => {
           if(retour.data.success){
-            console.log(retour.data);
             sessionStorage.setItem('jwt',retour.data.token);
+            sessionStorage.setItem('myId',retour.data.id);
             resolve();
           }else{
             reject(retour.data.error);

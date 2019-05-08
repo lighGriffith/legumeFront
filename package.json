@@ -39,6 +39,7 @@
     "leaflet": "^1.4.0",
     "native-base": "^2.12.1",
     "prop-types": "^15.7.2",
+    "rc-slider": "^8.6.9",
     "react": "16.5.0",
     "react-dom": "^16.8.6",
     "react-helmet": "^5.2.0",

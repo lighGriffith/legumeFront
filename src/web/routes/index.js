@@ -28,6 +28,9 @@ import UpdateProfileComponent from '../components/User/UpdateProfile';
 import ProduitsContainer from '../../containers/Produits';
 import ProduitsComponent from '../components/Produit/Produits';
 
+import CommandesContainer from '../../containers/Commandes';
+import CommandesComponent from '../components/Commande/Commande';
+
 import MapContainer from '../../containers/Map';
 import MapComponent from '../components/Map/Map';
 
@@ -90,6 +93,33 @@ const Index = () => (
       render={props => (
         <TemplateSidebar pageTitle="Produits">
           <ProduitsContainer {...props} Layout={ProduitsComponent} />
+        </TemplateSidebar>
+      )}
+    />
+    <Route
+      name="produits"
+      path="/produits"
+      render={props => (
+        <TemplateSidebar pageTitle="Mes Produits">
+          <ProduitsContainer {...props} Layout={ProduitsComponent} />
+        </TemplateSidebar>
+      )}
+    />
+    <Route
+      name="commandes"
+      path="/commandes/:id_user"
+      render={props => (
+        <TemplateSidebar pageTitle="Commandes">
+          <CommandesContainer {...props} Layout={CommandesComponent} />
+        </TemplateSidebar>
+      )}
+    />
+    <Route
+      name="commandes"
+      path="/commandes"
+      render={props => (
+        <TemplateSidebar pageTitle="Mes Commandes">
+          <CommandesContainer {...props} Layout={CommandesComponent} />
         </TemplateSidebar>
       )}
     />

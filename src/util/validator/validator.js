@@ -14,6 +14,16 @@ const schema = {
          max:255,
 
       },
+      adresse : {
+         type:"string",
+         min:2,
+         max:100
+      },
+      ville:{
+         type:"string",
+         min:1,
+         max:100
+      },
       email:{
          type:"email"
       },

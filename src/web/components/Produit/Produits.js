@@ -13,19 +13,22 @@ import {
   Input,
   Button,
   FormGroup,
-  CardHeader,
 } from 'reactstrap';
+import CardProduit from './CardProduit';
+import CardAjoutProduit from './CardAjoutProduit';
 
-import { Link } from 'react-router-dom';
 import Error from '../UI/Error';
+
 class Produits extends React.Component {
   static propTypes = {
     error: PropTypes.array,
     loading: PropTypes.bool.isRequired,
     produits: PropTypes.arrayOf(PropTypes.shape()).isRequired,
     onFormSubmit: PropTypes.func.isRequired,
+    recipeId:PropTypes.string,
     success:PropTypes.string,
-    loading: PropTypes.bool.isRequired,
+    onProduitSuppression:PropTypes.func.isRequired,
+    onProduitAchat:PropTypes.func.isRequired,
   }
 
   static defaultProps = {
@@ -34,101 +37,52 @@ class Produits extends React.Component {
   }
 
   state = {
-    nom: '',
-    quantite: '',
-    prix: '',
+      nom: '',
+      quantite: '',
+      prix: '',
+      progressValue: 0
   }
 
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.ajoutProduit = this.ajoutProduit.bind(this);
+    this.achatProduit = this.achatProduit.bind(this);
+    this.supprimerProduit=this.supprimerProduit.bind(this);
   }
 
-  handleChange = e => this.setState({ [e.target.name]: e.target.value });
-
-  handleSubmit = (event) => {
-    event.preventDefault();
+  ajoutProduit = (evt,produit) => {
+    evt.preventDefault();
     const { onFormSubmit } = this.props;
 
-    onFormSubmit(this.state)
+    onFormSubmit(produit)
+      .then(() => setTimeout(() => {console.log("ajout OK");}, 1000))
+      .catch(() => {console.log("ajout KO")});
+  }
+
+  supprimerProduit= (evt,idProduit) => {
+    evt.preventDefault();
+    const { onProduitSuppression } = this.props;
+
+    onProduitSuppression(idProduit)
+      .then(() => setTimeout(() => {console.log("ajout OK");}, 1000))
+      .catch(() => {console.log("ajout KO")});
+  }
+
+  achatProduit = (commande) => {
+    const { onProduitAchat } = this.props;
+    onProduitAchat(commande)
       .then(() => setTimeout(() => {console.log("ajout OK");}, 1000))
       .catch(() => {console.log("ajout KO")});
   }
 
   render() {
-    const { loading, error, success } = this.props;
-    const {
-      nom, quantite, prix
-    } = this.state;
+    const { loading, error, success ,recipeId} = this.props;
 
     // Build Cards for Listing
-    const ajoutCard=<Card key="ajout">
-      <CardBody>
-        <CardTitle>Ajout d'un produit</CardTitle>
-        {!!error && <Alert color="danger">
-          {error.map((item, idx) =>
-            <Row  key={item.field+idx.toString()} >{item.message}</Row>
-        )}
-        </Alert>}
-        {!!success && <Alert color="success">{success}</Alert>}
-        <Form onSubmit={this.handleSubmit}>
-          <FormGroup>
-            <Label for="nom">Nom</Label>
-            <Input
-              type="text"
-              name="nom"
-              id="nom"
-              placeholder="Carotte"
-              disabled={loading}
-              value={nom}
-              onChange={this.handleChange}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label for="prix">Prix</Label>
-            <Input
-              type="text"
-              pattern="[0-9]*"
-              name="prix"
-              id="prix"
-              placeholder="120"
-              disabled={loading}
-              value={prix}
-              onChange={this.handleChange}
-            />
-          </FormGroup>
-          <FormGroup>
-            <Label for="quantite">Quantite</Label>
-            <Input
-              type="text"
-              pattern="[0-9]*"
-              name="quantite"
-              id="quantite"
-              placeholder="30"
-              disabled={loading}
-              value={quantite}
-              onChange={this.handleChange}
-            />
-          </FormGroup>
-          <Button color="primary" disabled={loading} className="btn btn-primary">
-            {loading ? 'Loading' : 'Ajouter un produit'}
-          </Button>
-        </Form>
-      </CardBody>
-    </Card>
-    const cards = this.props.produits.map(item => (
-      <Card key={`${item._id}`}>
-        <CardBody>
-          <CardTitle>{item.nom}</CardTitle>
-          <CardText>{item.prix}€/kg {item.quantite} kg disponible</CardText>
-          <Link className="btn btn-primary" to={`/produit/${item.id}`}>
-            Acheter ce produit
-            {' '}
-            <i className="icon-arrow-right" />
-          </Link>
-        </CardBody>
-      </Card>
+
+    const ajoutCard=!!recipeId?'':<CardAjoutProduit ajoutProduit={this.ajoutProduit} key="ajout" {...this.props}/>;
+    const cards = this.props.produits.map(produit => (
+      <CardProduit supprimerProduit={this.supprimerProduit} achatProduit={this.achatProduit} key={`${produit._id}`} produit={produit} {...this.props} />
     ));
 
     // Show Listing
@@ -136,7 +90,7 @@ class Produits extends React.Component {
       <div>
         <Row className="pt-4 pt-sm-0">
           <Col sm="12">
-            <h1>produits</h1>
+            <h1>{!recipeId ?'Mes Produits':'Produits'}</h1>
           </Col>
         </Row>
         <Row className={loading ? 'content-loading' : ''}>

@@ -2,6 +2,7 @@ import member from './member';
 import recipes from './recipes';
 import produits from './produits';
 import users from './users';
+import commandes from './commandes';
 
 const rehydrated = (state = false, action) => {
   switch (action.type) {
@@ -18,4 +19,5 @@ export default {
   recipes,
   produits,
   users,
+  commandes
 };

@@ -44,7 +44,6 @@ class SignUp extends Component {
         });
         throw err; // To prevent transition back
       });
-
   }
   onFormSubmit = (data) => {
     const { onFormSubmit } = this.props;

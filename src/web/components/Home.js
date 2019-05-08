@@ -6,17 +6,14 @@ const About = () => (
     <Row>
       <Jumbotron className="bg-primary text-white">
         <h1>
-          Web & Mobile App Starter Kit
+          Achat et ventes de légumes sans intermédiaires.
         </h1>
         <p className="lead">
-          For when you're looking to build 'the next big thing', but don't
-          want to start from scratch.
+          Si vous en avez marre de travailler pour payer des intermédiaires inutiles ou
+          si vous voulez consommer local et retisser du lien entre vous et votre Terre...
         </p>
         <p>
-          This App Starter Kit is built for those who need both a web app + mobile app, and don't
-          want to write and maintain two different code bases. The project shares the 'business
-          logic' and allows flexibility in View components to ensure your project looks and feels
-          native in each platform.
+          Cette application est faites pour vous !
         </p>
       </Jumbotron>
     </Row>

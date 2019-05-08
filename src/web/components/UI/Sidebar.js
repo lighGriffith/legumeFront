@@ -33,6 +33,13 @@ const SidebarNavItems = () => (
         <span>Map</span>
       </Link>
     </NavItem>
+    <NavItem>
+      <Link className={`nav-link ${window.location.pathname.startsWith('/commandes') && 'active'}`} to="/commandes">
+        <i className="icon-notebook" />
+        {' '}
+        <span>Commandes</span>
+      </Link>
+    </NavItem>
   </div>
 );
 

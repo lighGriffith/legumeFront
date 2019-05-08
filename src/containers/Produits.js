@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getProduits , addProduit} from '../actions/produits';
+import { getProduits , addProduit , deleteProduit} from '../actions/produits';
+import {addCommande} from '../actions/commandes';
+
 
 class Produits extends Component {
   static propTypes = {
@@ -10,6 +12,8 @@ class Produits extends Component {
     fetchProduits: PropTypes.func.isRequired,
     onFormSubmit: PropTypes.func.isRequired,
     match: PropTypes.shape({ params: PropTypes.shape({}) }),
+    onProduitSuppression: PropTypes.func.isRequired,
+    onProduitAchat:PropTypes.func.isRequired,
   }
 
 
@@ -22,10 +26,59 @@ class Produits extends Component {
   componentDidMount = () =>{
     this.fetchData();
   }
+  onProduitSuppression=idProduit=>{
+    const { onProduitSuppression } = this.props;
+
+    this.setState({ loading: true });
+
+    return onProduitSuppression(idProduit)
+      .then((ret) => {
+        console.log(ret);
+        this.setState({
+        loading: false,
+        success: 'Success - Votre produit a bien été supprimée',
+        error: null,
+      });
+    }).then((ret) => {
+      return this.fetchData();
+  }).catch((err) => {
+        console.log(err);
+        this.setState({
+          loading: false,
+          success: null,
+          error: err,
+        });
+        throw err; // To prevent transition back
+      });
+  }
+
+  onProduitAchat=commande=>{
+    const { onProduitAchat } = this.props;
+    this.setState({ loading: true });
+
+    return onProduitAchat(commande)
+      .then((ret) => {
+        console.log(ret);
+        this.setState({
+        loading: false,
+        success: 'Success - Votre commande a bien été effectuée',
+        error: null,
+      });
+    }).then((ret) => {
+      return this.fetchData();
+  }).catch((err) => {
+        console.log(err);
+        this.setState({
+          loading: false,
+          success: null,
+          error: err,
+        });
+        throw err; // To prevent transition back
+      });
+  }
 
   onFormSubmit = (data) => {
     const { onFormSubmit,match } = this.props;
-    data.idUser= (match && match.params && match.params.id_user) ? match.params.id_user : null;
     data.quantite=data.quantite?parseFloat(data.quantite):data.quantite;
     data.prix=data.quantite?parseFloat(data.prix):data.prix;
     this.setState({ loading: true });
@@ -53,7 +106,7 @@ class Produits extends Component {
 
   fetchData = (data) => {
     const { fetchProduits , match } = this.props;
-    const idUser = (match && match.params && match.params.id_user) ? match.params.id_user : null;
+    const idUser = (match && match.params && match.params.id_user && match.params.id_user!==sessionStorage.getItem("myId")) ? match.params.id_user : null;
 
     this.setState({ loading: true });
 
@@ -75,7 +128,7 @@ class Produits extends Component {
   render = () => {
     const { Layout, produits ,match } = this.props;
     const { loading, error ,success } = this.state;
-    const id = (match && match.params && match.params.id_user) ? match.params.id_user : null;
+    const id = (match && match.params && match.params.id_user && match.params.id_user!==sessionStorage.getItem("myId")) ? match.params.id_user : null;
     return (
       <Layout
         recipeId={id}
@@ -85,6 +138,8 @@ class Produits extends Component {
         produits={produits}
         reFetch={() => this.fetchData()}
         onFormSubmit={this.onFormSubmit}
+        onProduitSuppression={this.onProduitSuppression}
+        onProduitAchat={this.onProduitAchat}
       />
     );
   }
@@ -97,6 +152,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   onFormSubmit: addProduit,
   fetchProduits: getProduits,
+  onProduitSuppression:deleteProduit,
+  onProduitAchat:addCommande
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Produits);

@@ -1,4 +1,3 @@
-import { Firebase, FirebaseRef } from '../lib/firebase';
 import axios from "axios";
 import { errorMessages } from '../constants/messages';
 import jsonValidator from '../util/validator/validator';
@@ -7,6 +6,7 @@ import jsonValidator from '../util/validator/validator';
   */
 export function getProduits(idUser) {
   const jwt = sessionStorage.getItem('jwt');
+  if(!idUser)idUser=sessionStorage.getItem("myId");
   return dispatch => new Promise( (resolve, reject) => {
     // Validation rules
       return axios.get("http://localhost:3001/api/user/"+idUser+"/produit",{headers:{
@@ -18,12 +18,22 @@ export function getProduits(idUser) {
   }).catch((err) => { console.log(err);throw err; });
 }
 
+export function deleteProduit(idProduit){
+  const jwt = sessionStorage.getItem('jwt');
+  const idUser=sessionStorage.getItem("myId");
+  return dispatch => new Promise( (resolve, reject) => {
+    // Validation rules
+      return axios.delete("http://localhost:3001/api/user/"+idUser+"/produit/"+idProduit,{headers:{
+        'authorization':jwt
+      }})
+        .then((retour) => {
+          console.log(retour);
+          resolve();
+        }).catch(reject);
+  }).catch((err) => { console.log(err);throw err; });
+}
 
 export function addProduit(formData){
-  const {
-    name,prix,quantite
-  } = formData;
-  console.log(formData);
   return dispatch => new Promise( (resolve, reject) => {
     // Validation rules
     var validMessage=jsonValidator.validate(formData,"produit");
@@ -33,7 +43,7 @@ export function addProduit(formData){
     } else{
       return axios({
         method: 'POST',
-        url: "http://localhost:3001/api/user/"+formData.idUser+"/produit",
+        url: "http://localhost:3001/api/user/"+sessionStorage.getItem("myId")+"/produit",
         headers: {'authorization':sessionStorage.getItem("jwt")},
         data: formData})
         .then((ret) => {
